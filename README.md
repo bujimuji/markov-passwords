@@ -1,4 +1,9 @@
 # Markov-chain passwords generator
+
+[![Go Reference](https://pkg.go.dev/badge/github.com/bujimuji/markov-passwords.svg)](https://pkg.go.dev/github.com/bujimuji/markov-passwords)
+[![Go Report Card](https://goreportcard.com/badge/github.com/bujimuji/markov-passwords?style=flat-square)](https://goreportcard.com/report/github.com/bujimuji/markov-passwords)
+![GitHub](https://img.shields.io/github/license/bujimuji/markov-passwords)
+
 The Markov-chain password generator is one of the password guessing methods. The trained model represents the probability of transition between specific characters.
 Password guessing attacks using n-grams (i.e., substrings of length n appearing in a training set) have been originally proposed by [Narayanan and Shmatikov](https://www.cs.cornell.edu/~shmat/shmat_ccs05pwd.pdf).
 
