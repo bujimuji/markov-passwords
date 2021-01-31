@@ -62,7 +62,7 @@ func (g *Generator) genPassword(n uint32, sc <-chan int) <-chan string {
 			randi := fastrand.Uint32n(n)
 			seed := g.seeds[randi]
 			password.WriteString(seed)
-			for b != '\n'{
+			for b != '\n' {
 				trans := g.trans[seed]
 				total := Sum(trans)
 				rand := int(fastrand.Uint32n(uint32(total)))
@@ -136,10 +136,10 @@ func (g *Generator) Generate(chans int, maxAttempts uint64) {
 	}
 
 	var i int
-	var l = 1<<14
+	var l = 1 << 14
 	var buf = make([]byte, l)
 	for pass := range mergeStr(pc...) {
-		if l - i < len(pass) {
+		if l-i < len(pass) {
 			_, _ = os.Stdout.Write(buf[:i])
 			i = 0
 		}
@@ -149,4 +149,3 @@ func (g *Generator) Generate(chans int, maxAttempts uint64) {
 		_, _ = os.Stdout.Write(buf[:i])
 	}
 }
-
