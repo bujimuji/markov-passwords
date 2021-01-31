@@ -1,67 +1,77 @@
 # Markov-chain passwords generator
-The Markov-chain password generator is one of the password guessing methods. The trained model represents the probability of transition between specific characters. 
+The Markov-chain password generator is one of the password guessing methods. The trained model represents the probability of transition between specific characters.
+Password guessing attacks using n-grams (i.e., substrings of length n appearing in a training set) have been originally proposed by [Narayanan and Shmatikov](https://www.cs.cornell.edu/~shmat/shmat_ccs05pwd.pdf).
 
-The [original implementation](https://github.com/brannondorsey/markov-passwords) has written in Python, and It is very slow for experimentation purposes. This implementation is written in Go and is more faster.
+There is another implementation by *brannondorsey* [here](https://github.com/brannondorsey/markov-passwords).
+It has written in Python, and It is very slow for experimentation purposes. This implementation is written in Go and is much faster.
 
-## license
+## License
 **markov-passwords** is licensed under the MIT license.
 
-## Get Requirements
-```
-go get github.com/sirupsen/logrus
-```
+## Tests
 
-## Speed Test
+### Speed
 Trained on [Top304Thousand-probable-v2](https://weakpass.com/wordlist/1859) password list.
 
 The `pv` results:
 ```shell
-./bin/sample -infile top304K.json | pv -lta > /dev/null
-00:30 [ 716k/s]
+./bin/mkpass -sample top304K.json -m 100000000 | pv -lta > /dev/null
+00:30 [1.44M/s]
 ```
 Python implementation:
 ```shell
 python sample.py | pv -lta > /dev/null
 00:30 [5.30k/s]
 ```
-## Usage
-### Clone and Build
+
+### Unique Passwords
+The `sort` results:
+```shell
+./bin/mkpass -sample top304K.json -m 1000000 | sort -u | wc -l
+786577
 ```
-go get github.com/bujimuji/markov-passwords
+Python implementation:
+```shell
+python sample.py | head -1000000 | sort -u | wc -l
+541842
+```
+
+## Usage
+### Get and Build
+```shell
+go get github.com/bujimuji/markov-passwords/...
 cd $GOPATH/src/github.com/bujimuji/markov-passwords
 make
 ```
-### Train
+
+### Train and Generate Passwords
 ```
-Usage of ./bin/train:
+Usage of ./bin/mkpass:
   -infile string
-    	read training data from file
-  -max-ngram int
-    	maximum number of ngrams to train (default 3)
-  -outfile string
-    	write training data to file
+    	read training password list from file (- for stdin)
+  -j int
+    	number of channels for fan-out (default 64)
+  -m uint
+    	the amount of passwords created (default 1000000)
+  -ngram int
+    	number of ngrams to train markov model (default 3)
+  -sample string
+    	model path for generating new passwords
+  -train string
+    	model path for saving trained model in json format and exit
 ```
 Example:
+```shell
+./bin/mkpass -infile assets/Top304Thousand-probable-v2.txt -m 100
 ```
-./bin/train -infile Top304Thousand-probable-v2 -outfile top304K.json
-```
-
-### Generate
-```
-Usage of ./bin/sample:
-  -b int
-    	block size of prints (default 3000)
-  -infile string
-    	read training data from file
-  -j int
-    	number of threads (default 32)
-  -max-ngram int
-    	maximum number of ngrams to train (default 3)
-```
-Eample: 
-```
-./bin/sample -infile top304K.json
+#### Only Train
+Example:
+```shell
+./bin/mkpass -infile assets/Top304Thousand-probable-v2.txt -train top304k.json
 ```
 
-## TODO
-- [ ] Use an insecure and fast random number generator
+#### Only Generate
+Example: 
+```shell
+./bin/mkpass -sample top304K.json -m 1000
+```
