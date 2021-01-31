@@ -5,7 +5,7 @@
 ### User Stuffs ###
 **/*.prof
 **/*.json
-assets/
+bin/
 
 ### Go ###
 # Binaries for programs and plugins
