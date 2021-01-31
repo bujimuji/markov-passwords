@@ -1,28 +1,19 @@
 # The binary to build
-TRAIN ?= train
-SAMPLE ?= sample
+BIN ?= mkpass
 
 # This repo's root import path
 PKG := github.com/bujimuji/markov-passwords
 
 all:
-	@$(MAKE) train
-	@$(MAKE) sample
+	@$(MAKE) mkpass
 
-train: bin/$(TRAIN)
-sample: bin/$(SAMPLE)
+mkpass: bin/$(BIN)
 
-bin/$(TRAIN): build-dirs
+bin/$(BIN): build-dirs
 	@echo "building: $@"
 	go build \
-	-o bin/$(TRAIN) \
-	$(PKG)/cmd/$(TRAIN)
-
-bin/$(SAMPLE): build-dirs
-	@echo "building: $@"
-	go build \
-	-o bin/$(SAMPLE) \
-	$(PKG)/cmd/$(SAMPLE)
+	-o bin/$(BIN) \
+	$(PKG)/cmd/markov-passwords
 
 build-dirs:
 	@mkdir -p bin
